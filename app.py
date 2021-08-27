@@ -1,13 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def home():
-    html = "<h3>Hello Udacity!</h3><p>This is Tarun Kumar</p>\
-        <p>Code changed. blue/green deployment stages</p>"
-    return html.format(format)
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
