@@ -55,7 +55,7 @@ workflows:
   default:
     jobs:
       - run-lint
-      - build-docker-image
+      - build-docker-image:
           requires:
             - "run-lint"
       - push-docker-image:
