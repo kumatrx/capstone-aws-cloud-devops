@@ -55,6 +55,16 @@ jobs:
               docker push kumatrx/$IMAGE_NAME:$TAG
 
 workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build_and_push_image:
+          name: build-and-push-image-ecr
+          account-url: AWS_ECR_ACCOUNT_URL
+          region: AWS_DEFAULT_REGION
+          repo: AWS_REPONAME
+          dockerfile: ~/project/Dockerfile
+          path: ~/project/
+          tag: ${CIRCLE_SHA1}
   default:
     jobs:
       - run-lint
@@ -64,11 +74,3 @@ workflows:
       - push-docker-image:
           requires:
             - "build-docker-image"
-      - aws-ecr/build_and_push_image:
-          name: build-and-push-image-ecr
-          account-url: AWS_ECR_ACCOUNT_URL
-          region: AWS_DEFAULT_REGION
-          repo: AWS_REPONAME
-          dockerfile: ~/project/Dockerfile
-          path: ~/project/
-          tag: ${CIRCLE_SHA1}
