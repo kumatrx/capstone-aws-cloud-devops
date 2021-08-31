@@ -24,7 +24,7 @@ jobs:
             name: Run Lint
             command: |
               hadolint Dockerfile
-    build-docker-image:
+    build-docker:
       docker:
         - image: circleci/node:13.8.0
       steps:
@@ -39,6 +39,17 @@ jobs:
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
+  test-docker:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+
+      - run:
+          name: Docker Test
+          command: |
+            docker image ls
+
     push-docker-image:
       docker:
         - image: circleci/node:13.8.0
@@ -60,12 +71,15 @@ workflows:
   default:
     jobs:
       - run-lint
-      - build-docker-image:
+      - build-docker:
           requires:
             - "run-lint"
+      - test-docker:
+          requires:
+            - "build-docker"
       - push-docker-image:
           requires:
-            - "build-docker-image"
+            - "test-docker"
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-ecr
           account-url: AWS_ECR_ACCOUNT_URL
@@ -77,11 +91,5 @@ workflows:
       - aws-eks/create-cluster:
           cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
           aws-region: AWS_DEFAULT_REGION
-          install-command: mkdir -p eksctl_download
-          install-command: curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_download
-          install-command: chmod +x eksctl_download/eksctl
-          install-command: mv eksctl_download/eksctl /usr/local/bin/
-          install-command: rmdir eksctl_download
-
           requires:
             - build-and-push-image-ecr
