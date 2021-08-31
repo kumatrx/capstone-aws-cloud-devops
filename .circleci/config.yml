@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@0.0.4
+  aws-ecr: circleci/aws-ecr@7.2.0
   
 parameters:
   workflow-id:
@@ -69,4 +69,6 @@ workflows:
           account-url: ${AWS_ECR_ACCOUNT_URL}
           region: ${AWS_DEFAULT_REGION}
           repo: ${AWS_REPONAME}
+          dockerfile: ~/project/Dockerfile
+          path: ~/project/
           tag: ${CIRCLE_SHA1}
