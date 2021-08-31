@@ -86,9 +86,7 @@ jobs:
               mkdir -p eksctl_download
               curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_download
               sudo chmod +x eksctl_download/eksctl
-              sudo mv eksctl_download/eksctl /usr/local/bin/
-              sudo rmdir eksctl_download
-              eksctl create cluster -f .circleci/eks/cluster.yml --write-kubeconfig --set-kubeconfig-context
+              sudo eksctl create cluster -f .circleci/eks/cluster.yml --write-kubeconfig --set-kubeconfig-context
 
     deploy-application:
       executor: aws-eks/python3
