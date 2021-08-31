@@ -85,11 +85,12 @@ jobs:
             command: |
               mkdir -p eksctl_download
               curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_download
-              sudo install eksctl /bin/eksctl
-              sudo chmod +x /usr/local/bin/eksctl
-              echo $(ls /usr/local/bin/eksctl)
-              echo $(/usr/local/bin/eksctl version)
-              eksctl create cluster -f config/cluster.yml
+              sudo mv eksctl_download/eksctl /usr/local/bin/
+              sudo rmdir eksctl_download
+              cd /usr/local/bin/
+              echo $(ls /usr/local/bin/)
+              sudo chmod +x eksctl_download/eksctl
+              sudo eksctl create cluster -f config/cluster.yml
 
     deploy-application:
       executor: aws-eks/python3
