@@ -204,7 +204,7 @@ workflows:
       - push-docker:
             requires: [build-docker]
       - create_network:
-            requires: [build]
+            requires: [build-docker]
             filters:
               branches:
                 only: [master]
