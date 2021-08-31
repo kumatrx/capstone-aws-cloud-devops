@@ -88,7 +88,6 @@ jobs:
               sudo mv eksctl_download/eksctl /usr/local/bin/
               sudo rmdir eksctl_download
               cd /usr/local/bin/
-              echo $(ls /usr/local/bin/)
               sudo chmod +x eksctl
               sudo eksctl create cluster -f config/cluster.yml
 
