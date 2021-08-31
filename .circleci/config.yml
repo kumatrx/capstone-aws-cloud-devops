@@ -52,58 +52,132 @@ jobs:
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD 
               docker push kumatrx/$IMAGE_NAME:$TAG
 
-    aws-eks-create-cluster:
+   create_network:
       docker:
-        - image: circleci/node:13.8.0
+         - image: amazon/aws-cli
       steps:
-        - checkout
-        - aws-cli/setup
-        - run:
-            name: Create EKS Cluster
+         - checkout
+         - run:
+            name: Ensure network infrastructure exist
             command: |
-              mkdir -p eksctl_download
-              curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_download
-              sudo mv eksctl_download/eksctl /usr/local/bin/
-              sudo rmdir eksctl_download
-              cd /usr/local/bin/
-              echo $(sudo eksctl version)
-              sudo eksctl create cluster --name=cluster-1 --nodes=4
+               cd infra
+               aws cloudformation deploy \
+               --template-file network.yml \
+               --tags project=${ENVIRONMENT_NAME}-tarun \
+               --stack-name capstoneNETWORK-${CIRCLE_WORKFLOW_ID} \
+               --parameter-overrides file://network-params.json
 
-    deploy-application:
-      executor: aws-eks/python3
-      parameters:
-        cluster-name:
-          description: |
-            Name of the EKS cluster
-          type: string
-        docker-image-name:
-          description: |
-            Name of the docker image to be deployed
-          type: string
-        version-info:
-          description: |
-            App version information
-          type: string
-        aws-region:
-          description: |
-            AWS region
-          type: string
-          default: "ap-northeast-1"
+   create_cluster:
+      docker:
+         - image: amazon/aws-cli
       steps:
-        - checkout
-        - aws-eks/update-kubeconfig-with-authenticator:
-            cluster-name: << parameters.cluster-name >>
-            install-kubectl: true
-            aws-region: << parameters.aws-region >>
-        - kubernetes/create-or-update-resource:
-            resource-file-path: "deploy/deploy.yml"
-            get-rollout-status: true
-            resource-name: deployment/capstone
-        - kubernetes/create-or-update-resource:
-            resource-file-path: "deploy/deploy.yml"
+         - checkout
+         - run:
+            name: Create Amazon EKS Cluster
+            command: |
+               cd infra
+               aws cloudformation deploy \
+               --template-file kube-cluster.yml \
+               --tags project=${ENVIRONMENT_NAME}-tarun \
+               --stack-name capstoneEKSCluster-${CIRCLE_WORKFLOW_ID} \
+               --parameter-overrides file://kube-cluster-params.json \
+               --capabilities CAPABILITY_NAMED_IAM
+            no_output_timeout: 15m
+
+   create_nodes:
+      docker:
+         - image: amazon/aws-cli
+      steps:
+         - checkout
+         - run:
+            name: Attach nodes to the Amazon EKS Cluster
+            command: |
+               cd infra
+               aws cloudformation deploy \
+               --template-file nodes.yml \
+               --tags project=${ENVIRONMENT_NAME}-tarun \
+               --stack-name capstoneEKSNodes-${CIRCLE_WORKFLOW_ID} \
+               --parameter-overrides file://nodes-params.json \
+               --capabilities CAPABILITY_NAMED_IAM
+            # fix Too long with no output
+            no_output_timeout: 15m
+
+   create_ec2s:
+      docker:
+         - image: amazon/aws-cli
+      steps:
+         - checkout
+         - run:
+            name: Create EC2 instances
+            command: |
+               cd infra
+               aws cloudformation deploy \
+               --template-file ec2.yml \
+               --tags project=${ENVIRONMENT_NAME}-tarun \
+               --stack-name capstoneEC2Instances-${CIRCLE_WORKFLOW_ID} \
+               --parameter-overrides file://ec2-params.json
+
+   create_deployment:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - checkout
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          install-kubectl: true
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: /home/circleci/project/.circleci/deployment-and-service.yml
+          resource-name: deployment/capstone-nginx
+
+   create_test:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          capstone-nginx
+        type: string
+    steps:
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+      - run:
+          name: Test cluster
+          command: |
+            kubectl get svc
+            kubectl get pods
+            kubectl describe pods
+            kubectl get nodes
+            kubectl get deployment
+            kubectl describe service capstone-nginx
+            kubectl get services -o wide
+
+   update_deployment:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - checkout
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          install-kubectl: true
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: /home/circleci/project/.circleci/deployment-and-servicev2.yml
+          resource-name: deployment/capstone-nginx
+      - run:
+         command: |
+            kubectl rollout status deployment capstone-nginx
+            kubectl get deployment capstone-nginx
 
 workflows:
-
   default:
     jobs:
       - run-lint
@@ -111,3 +185,17 @@ workflows:
           requires: [run-lint]
       - push-docker:
           requires: [build-docker]
+      - create_network:
+            requires: [build-docker]
+      - create_cluster:
+            requires: [create_network]
+      - create_nodes:
+            requires: [create_cluster]
+      - create_ec2s:
+            requires: [create_nodes]
+      - create_deployment:
+            cluster-name: ProjectCapstone-ekscluster
+            requires: [create_ec2s]
+      - create_test:
+            cluster-name: ProjectCapstone-ekscluster
+            requires: [create_ec2s]
