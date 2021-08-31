@@ -31,7 +31,7 @@ spec:
         app: capstone-nginx
     spec:
       containers:
-        - image: kumatrx/udacity:capstone2
+        - image: kumatrx/$IMAGE_NAME:$TAG
           imagePullPolicy: Always
           name: capstone-nginx
           ports:
