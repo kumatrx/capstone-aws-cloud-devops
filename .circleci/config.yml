@@ -88,7 +88,9 @@ jobs:
               sudo chmod +x eksctl_download/eksctl
               sudo mv eksctl_download/eksctl /usr/local/bin/
               sudo rmdir eksctl_download
-              aws eksctl create cluster -f .circleci/eks/cluster.yml --write-kubeconfig --set-kubeconfig-context
+              cd /usr/local/bin/
+              echo $(pwd)
+              /usr/local/bin/eksctl create cluster -f .circleci/eks/cluster.yml --write-kubeconfig --set-kubeconfig-context
 
     deploy-application:
       executor: aws-eks/python3
