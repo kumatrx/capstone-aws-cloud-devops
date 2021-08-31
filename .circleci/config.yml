@@ -67,11 +67,9 @@ workflows:
             - "build-docker-image"
       - aws-ecr/build-and-push-image:
           name: build-and-push-image-ecr
-          account-url: $AWS_ECR_ACCOUNT_URL
-          region: $AWS_DEFAULT_REGION
-          repo: $ECRRepository
+          account-url: "https://918511218979.dkr.ecr.ap-northeast-1.amazonaws.com"
+          region: "ap-northeast-1"
+          repo: "myrepo"
           dockerfile: ~/project/Dockerfile
           path: ~/project/
           tag: ${CIRCLE_SHA1}
-          requires:
-            - "push-docker-image"
