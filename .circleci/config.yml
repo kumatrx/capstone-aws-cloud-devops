@@ -46,10 +46,10 @@ jobs:
         - checkout
 
         - setup_remote_docker:
-          version: 19.03.13
+            version: 19.03.13
 
         - run:
-            name: Docker Test
+            name: Build Docker Image
             command: |
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone-aws-cloud-devops
