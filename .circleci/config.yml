@@ -69,6 +69,4 @@ workflows:
           account-url: ${AWS_ECR_ACCOUNT_URL}
           region: ${AWS_DEFAULT_REGION}
           repo: ${AWS_REPONAME}
-          dockerfile: ~/project/Dockerfile
-          path: ~/project/
           tag: ${CIRCLE_SHA1}
