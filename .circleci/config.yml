@@ -65,73 +65,73 @@ jobs:
               docker push kumatrx/$IMAGE_NAME:$TAG
 
     create_network:
-        docker:
-          - image: amazon/aws-cli
-        steps:
-          - checkout
-          - run:
-              name: Ensure network infrastructure exist
-              command: |
-                cd infra
-                aws cloudformation deploy \
-                --template-file network.yml \
-                --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name Network-<< pipeline.parameters.workflow-id >> \
-                --parameter-overrides file://network-params.json
-          - destroy-environment
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Ensure network infrastructure exist
+            command: |
+              cd infra
+              aws cloudformation deploy \
+              --template-file network.yml \
+              --tags project=UdacityCloudDevopsCapstoneProject \
+              --stack-name Network-<< pipeline.parameters.workflow-id >> \
+              --parameter-overrides file://network-params.json
+        - destroy-environment
 
     create_cluster:
-        docker:
-          - image: amazon/aws-cli
-        steps:
-          - checkout
-          - run:
-              name: Create Amazon EKS Cluster
-              command: |
-                cd infra
-                aws cloudformation deploy \
-                --template-file kube-cluster.yml \
-                --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EKSCluster-<< pipeline.parameters.workflow-id >> \
-                --parameter-overrides file://kube-cluster-params.json \
-                --capabilities CAPABILITY_NAMED_IAM
-              no_output_timeout: 15m
-          - destroy-environment
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Create Amazon EKS Cluster
+            command: |
+              cd infra
+              aws cloudformation deploy \
+              --template-file kube-cluster.yml \
+              --tags project=UdacityCloudDevopsCapstoneProject \
+              --stack-name EKSCluster-<< pipeline.parameters.workflow-id >> \
+              --parameter-overrides file://kube-cluster-params.json \
+              --capabilities CAPABILITY_NAMED_IAM
+            no_output_timeout: 15m
+        - destroy-environment
 
     create_nodes:
-        docker:
-          - image: amazon/aws-cli
-        steps:
-          - checkout
-          - run:
-              name: Attach nodes to the Amazon EKS Cluster
-              command: |
-                cd infra
-                aws cloudformation deploy \
-                --template-file nodes.yml \
-                --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EKSNodes-<< pipeline.parameters.workflow-id >> \
-                --parameter-overrides file://nodes-params.json \
-                --capabilities CAPABILITY_NAMED_IAM
-              # fix Too long with no output
-              no_output_timeout: 15m
-          - destroy-environment
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Attach nodes to the Amazon EKS Cluster
+            command: |
+              cd infra
+              aws cloudformation deploy \
+              --template-file nodes.yml \
+              --tags project=UdacityCloudDevopsCapstoneProject \
+              --stack-name EKSNodes-<< pipeline.parameters.workflow-id >> \
+              --parameter-overrides file://nodes-params.json \
+              --capabilities CAPABILITY_NAMED_IAM
+            # fix Too long with no output
+            no_output_timeout: 15m
+        - destroy-environment
 
     create_servers:
-        docker:
-          - image: amazon/aws-cli
-        steps:
-          - checkout
-          - run:
-              name: Create EC2 instances
-              command: |
-                cd infra
-                aws cloudformation deploy \
-                --template-file servers.yml \
-                --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EC2Instances-<< pipeline.parameters.workflow-id >> \
-                --parameter-overrides file://server-params.json
-          - destroy-environment
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Create EC2 instances
+            command: |
+              cd infra
+              aws cloudformation deploy \
+              --template-file servers.yml \
+              --tags project=UdacityCloudDevopsCapstoneProject \
+              --stack-name EC2Instances-<< pipeline.parameters.workflow-id >> \
+              --parameter-overrides file://server-params.json
+        - destroy-environment
 
     create_deployment:
       executor: aws-eks/python3
