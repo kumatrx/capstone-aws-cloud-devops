@@ -75,7 +75,14 @@ workflows:
           path: ~/project/
           tag: ${CIRCLE_SHA1}
       - aws-eks/create-cluster:
+          name: create-cluster-eks
           cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
           aws-region: AWS_DEFAULT_REGION
+          install-command: mkdir -p eksctl_download
+          install-command: curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_download
+          install-command: chmod +x eksctl_download/eksctl
+          install-command: mv eksctl_download/eksctl /usr/local/bin/
+          install-command: rmdir eksctl_download
+
           requires:
             - build-and-push-image-ecr
