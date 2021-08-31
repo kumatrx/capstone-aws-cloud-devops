@@ -75,7 +75,6 @@ workflows:
           path: ~/project/
           tag: ${CIRCLE_SHA1}
       - aws-eks/create-cluster:
-          name: create-cluster-eks
           cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
           aws-region: AWS_DEFAULT_REGION
           install-command: mkdir -p eksctl_download
