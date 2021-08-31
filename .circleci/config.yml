@@ -82,11 +82,11 @@ jobs:
             install-kubectl: true
             aws-region: << parameters.aws-region >>
         - kubernetes/create-or-update-resource:
-            resource-file-path: "deploy/deployment.yml"
+            resource-file-path: "deploy/deploy.yml"
             get-rollout-status: true
             resource-name: deployment/capstone
         - kubernetes/create-or-update-resource:
-            resource-file-path: "deploy/deployment.yml"
+            resource-file-path: "deploy/deploy.yml"
 
 workflows:
   default:
@@ -98,11 +98,6 @@ workflows:
       - push-docker-image:
           requires:
             - "build-docker-image"
-      - aws-ecr/build_and_push_image:
-          name: build-and-push-image-ecr
-          account-url: AWS_ECR_URL
-          region: AWS_DEFAULT_REGION
-          repo: AWS_ECR_NAME
-          dockerfile: ~/project/Dockerfile
-          path: ~/project/
-          tag: ${CIRCLE_SHA1}
+      - aws-eks/create-cluster:
+          cluster-name: eks-orb-capstone-project-deployment-<< pipeline.parameters.workflow-id >>
+          aws-region: $AWS_DEFAULT_REGION
