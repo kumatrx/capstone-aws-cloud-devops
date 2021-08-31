@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/kumatrx/capstone-project.svg?style=svg)](https://circleci.com/gh/kumatrx/capstone-project/)
+[![CircleCI](https://circleci.com/gh/kumatrx/capstone-aws-cloud-devops.svg?style=svg)](https://circleci.com/gh/kumatrx/capstone-aws-cloud-devops/)
 
 ## Cloud DevOps Engineer Capstone Project
 
