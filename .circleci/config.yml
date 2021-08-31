@@ -122,8 +122,8 @@ jobs:
           - destroy-environment
 
     create_servers:
-        docker:
-          - image: amazon/aws-cli
+      docker:
+        - image: cimg/base:2020.01
         steps:
           - checkout
           - aws-cli/setup
