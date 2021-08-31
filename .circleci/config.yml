@@ -219,4 +219,4 @@ workflows:
             requires: [create_servers]
       - create_test:
             cluster-name: ProjectCapstone-ekscluster
-            requires: [create_ec2s]
+            requires: [create_servers]
