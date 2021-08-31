@@ -53,9 +53,7 @@ jobs:
             name: Build Docker Image
             command: |
               cd docker-nginx
-              export TAG=v${CIRCLE_BUILD_NUM}
-              export IMAGE_NAME=capstone-aws-cloud-devops
-              docker build -t kumatrx/$IMAGE_NAME:$TAG .
+              docker build -t kumatrx/udacity:capstone .
         - slack/notify:
             event: fail
             template: basic_fail_1
@@ -71,11 +69,9 @@ jobs:
             name: Push Docker Image to Docker Hub
             command: |
               cd docker-nginx
-              export TAG=v${CIRCLE_BUILD_NUM}
-              export IMAGE_NAME=capstone-aws-cloud-devops
-              docker build -t kumatrx/$IMAGE_NAME:$TAG .
+              docker build -t kumatrx/udacity:capstone .
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD 
-              docker push kumatrx/$IMAGE_NAME:$TAG
+              docker push kumatrx/udacity:capstone
 
     create_network:
       docker:
