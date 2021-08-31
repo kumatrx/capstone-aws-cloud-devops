@@ -133,6 +133,6 @@ workflows:
               only: [master]
       - deploy-application:
           cluster-name: udacity1
-          aws-region: AWS_DEFAULT_REGION
+          aws-region: $AWS_DEFAULT_REGION
           docker-image-name: AWS_ECR_ACCOUNT_URL/capstone_project:${CIRCLE_SHA1}"
           version-info: "${CIRCLE_SHA1}"
