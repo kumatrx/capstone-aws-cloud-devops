@@ -1,10 +1,11 @@
 
 Description:
-  Melisa Bekan Capstone Project6 / Creates the nodegroup for the Amazon EKS Cluster
+  Tarun Kumar Udacity Cloud Devops Capstone Project / Creates the nodegroup for the Amazon EKS Cluster
+
 Parameters:
   EnvironmentName:
     Description: An Environment name that will be prefixed to resources
-    Default: ProjectCapstone
+    Default: CapstoneProject
     Type: String
 
   MinSize:

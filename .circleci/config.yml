@@ -63,8 +63,8 @@ jobs:
                 cd infra
                 aws cloudformation deploy \
                 --template-file network.yml \
-                --tags project=${ENVIRONMENT_NAME}-tarun \
-                --stack-name capstoneNETWORK-${CIRCLE_WORKFLOW_ID} \
+                --tags project=UdacityCloudDevopsCapstoneProject \
+                --stack-name Network-${CIRCLE_WORKFLOW_ID} \
                 --parameter-overrides file://network-params.json
 
     create_cluster:
@@ -78,8 +78,8 @@ jobs:
                 cd infra
                 aws cloudformation deploy \
                 --template-file kube-cluster.yml \
-                --tags project=${ENVIRONMENT_NAME}-tarun \
-                --stack-name capstoneEKSCluster-${CIRCLE_WORKFLOW_ID} \
+                --tags project=UdacityCloudDevopsCapstoneProject \
+                --stack-name EKSCluster-${CIRCLE_WORKFLOW_ID} \
                 --parameter-overrides file://kube-cluster-params.json \
                 --capabilities CAPABILITY_NAMED_IAM
               no_output_timeout: 15m
@@ -95,8 +95,8 @@ jobs:
                 cd infra
                 aws cloudformation deploy \
                 --template-file nodes.yml \
-                --tags project=${ENVIRONMENT_NAME}-tarun \
-                --stack-name capstoneEKSNodes-${CIRCLE_WORKFLOW_ID} \
+                --tags project=UdacityCloudDevopsCapstoneProject \
+                --stack-name EKSNodes-${CIRCLE_WORKFLOW_ID} \
                 --parameter-overrides file://nodes-params.json \
                 --capabilities CAPABILITY_NAMED_IAM
               # fix Too long with no output
@@ -113,8 +113,8 @@ jobs:
                 cd infra
                 aws cloudformation deploy \
                 --template-file ec2.yml \
-                --tags project=${ENVIRONMENT_NAME}-tarun \
-                --stack-name capstoneEC2Instances-${CIRCLE_WORKFLOW_ID} \
+                --tags project=UdacityCloudDevopsCapstoneProject \
+                --stack-name EC2Instances-${CIRCLE_WORKFLOW_ID} \
                 --parameter-overrides file://ec2-params.json
 
     create_deployment:

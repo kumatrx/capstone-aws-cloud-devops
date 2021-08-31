@@ -1,11 +1,10 @@
 Description: >
-  Melisa Bekan Capstone Project6 / Create EKS Cluster
-  Creates an Amazon EKS Cluster
+  Tarun Kumar Udacity Cloud Devops Capstone Project / Create EKS Cluster
   
 Parameters:
   EnvironmentName:
     Description: An Environment name that will be prefixed to resources
-    Default: ProjectCapstone
+    Default: CapstoneProject
     Type: String
 
 Resources:
