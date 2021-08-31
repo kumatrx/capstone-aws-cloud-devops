@@ -75,7 +75,7 @@ jobs:
           description: |
             AWS region
           type: string
-          default: "us-west-2"
+          default: "ap-northeast-1"
       steps:
         - checkout
         - aws-eks/update-kubeconfig-with-authenticator:
@@ -99,11 +99,10 @@ workflows:
       - push-docker-image:
           requires:
             - "build-docker-image"
-      - aws-eks/create-cluster:
-          cluster-name: eks-orb-capstone-project-deployment-<< pipeline.parameters.workflow-id >>
+      - deploy-application:
+          cluster-name: udacity1
           aws-region: $AWS_DEFAULT_REGION
-          command: |
-            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C eksctl_download
-            sudo chmod +x eksctl_download/eksctl
-            sudo mv eksctl_download/eksctl /usr/local/bin/
-            sudo rmdir eksctl_download
+          docker-image-name: "${AWS_ECR_URL}/eks_orb_capstone_project:${CIRCLE_SHA1}"
+          version-info: "${CIRCLE_SHA1}"
+          requires:
+            - "build-docker-image"
