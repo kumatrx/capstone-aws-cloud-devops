@@ -260,7 +260,7 @@ workflows:
 ##      - create_nodes:
 ##           requires: [create_cluster] 
       - create_servers:
-            requires: [create_nodes]
+            requires: [create_network]
       - create_deployment:
             cluster-name: ProjectCapstone-ekscluster
             requires: [create_servers]
