@@ -78,7 +78,7 @@ jobs:
                 aws cloudformation deploy \
                 --template-file network.yml \
                 --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name Network-${CIRCLE_WORKFLOW_ID} \
+                --stack-name Network-<< pipeline.parameters.workflow-id >> \
                 --parameter-overrides file://network-params.json
           - destroy-environment
 
@@ -95,7 +95,7 @@ jobs:
                 aws cloudformation deploy \
                 --template-file kube-cluster.yml \
                 --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EKSCluster-${CIRCLE_WORKFLOW_ID} \
+                --stack-name EKSCluster-<< pipeline.parameters.workflow-id >> \
                 --parameter-overrides file://kube-cluster-params.json \
                 --capabilities CAPABILITY_NAMED_IAM
               no_output_timeout: 15m
@@ -114,7 +114,7 @@ jobs:
                 aws cloudformation deploy \
                 --template-file nodes.yml \
                 --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EKSNodes-${CIRCLE_WORKFLOW_ID} \
+                --stack-name EKSNodes-<< pipeline.parameters.workflow-id >> \
                 --parameter-overrides file://nodes-params.json \
                 --capabilities CAPABILITY_NAMED_IAM
               # fix Too long with no output
@@ -134,7 +134,7 @@ jobs:
                 aws cloudformation deploy \
                 --template-file servers.yml \
                 --tags project=UdacityCloudDevopsCapstoneProject \
-                --stack-name EC2Instances-${CIRCLE_WORKFLOW_ID} \
+                --stack-name EC2Instances-<< pipeline.parameters.workflow-id >> \
                 --parameter-overrides file://server-params.json
           - destroy-environment
 
