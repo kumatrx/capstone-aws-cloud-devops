@@ -88,7 +88,8 @@ jobs:
               sudo mv eksctl_download/eksctl /usr/local/bin/
               sudo rmdir eksctl_download
               cd /usr/local/bin/
-              sudo eksctl create cluster -f config/cluster.yml
+              echo $(sudo eksctl version)
+              sudo eksctl create cluster --name=cluster-1 --nodes=4
 
     deploy-application:
       executor: aws-eks/python3
