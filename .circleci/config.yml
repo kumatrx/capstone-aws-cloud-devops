@@ -48,6 +48,7 @@ jobs:
         - run:
             name: Docker Test
             command: |
+              docker run -p 8000:80 kumatrx/capstone-aws-cloud-devops
               docker image ls
 
     push-docker-image:
@@ -88,6 +89,9 @@ workflows:
           dockerfile: Dockerfile
           path: ~/project/
           tag: ${CIRCLE_SHA1}
+          filters:
+            branches:
+              only: [master]
       - aws-eks/create-cluster:
           cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
           aws-region: AWS_DEFAULT_REGION
