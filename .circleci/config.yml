@@ -39,16 +39,16 @@ jobs:
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
-  test-docker:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
+    test-docker:
+      docker:
+        - image: circleci/node:13.8.0
+      steps:
+        - checkout
 
-      - run:
-          name: Docker Test
-          command: |
-            docker image ls
+        - run:
+            name: Docker Test
+            command: |
+              docker image ls
 
     push-docker-image:
       docker:
