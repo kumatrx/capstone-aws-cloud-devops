@@ -102,3 +102,8 @@ workflows:
       - aws-eks/create-cluster:
           cluster-name: eks-orb-capstone-project-deployment-<< pipeline.parameters.workflow-id >>
           aws-region: $AWS_DEFAULT_REGION
+          command: |
+            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C eksctl_download
+            sudo chmod +x eksctl_download/eksctl
+            sudo mv eksctl_download/eksctl /usr/local/bin/
+            sudo rmdir eksctl_download
