@@ -144,6 +144,7 @@ jobs:
               --tags project=UdacityCloudDevopsCapstoneProject \
               --stack-name EC2Instances-<< pipeline.parameters.workflow-id >> \
               --parameter-overrides file://server-params.json
+        - destroy-environment
 
     create_deployment:
       executor: aws-eks/python3
@@ -259,7 +260,7 @@ workflows:
       - create_nodes:
           requires: [create_cluster] 
       - create_servers:
-            requires: [create_network]
+            requires: [create_nodes]
       - create_deployment:
             cluster-name: ProjectCapstone-ekscluster
             requires: [create_servers]
