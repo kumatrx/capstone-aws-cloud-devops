@@ -2,7 +2,7 @@
 
 ## Cloud DevOps Engineer Capstone Project
 
-[Github Repo](https://github.com/kumatrx/capstone-project.git)
+[Github Repo](https://github.com/kumatrx/capstone-aws-cloud-devops.git)
 
 ### Configure environment variables on CircleCI
 
@@ -17,4 +17,4 @@ The following environment variablesz must be set for the project on CircleCI via
 
 ### LINKSq
 
-- [Github Repo](https://github.com/kelanik8/capstone-project.git)
+- [Github Repo](https://github.com/kumatrx/capstone-aws-cloud-devops.git)
