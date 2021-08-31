@@ -76,18 +76,19 @@ jobs:
 
     aws-eks-create-cluster:
       docker:
-        - image: cimg/base:2020.01
+        - image: circleci/node:13.8.0
       steps:
         - checkout
         - aws-cli/setup
         - run:
             name: Create EKS Cluster
             command: |
-              echo $(pwd)
+              echo $(ls)
               mkdir -p eksctl_install
               curl --silent --location --retry 5 https://github.com/weaveworks/eksctl/releases/download/0.63.0/eksctl_Linux_arm64.tar.gz | tar xz -C eksctl_install
               sudo chmod +x eksctl_install/eksctl
               echo $(pwd)
+              echo $(ls)
               cd eksctl_install
               eksctl create cluster -f .circleci/eks/cluster.yml --write-kubeconfig --set-kubeconfig-context
 
@@ -128,25 +129,4 @@ workflows:
 
   default:
     jobs:
-      - run-lint
-      - build-docker:
-          requires:
-            - "run-lint"
-      - test-docker:
-          requires:
-            - "build-docker"
-      - push-docker-image:
-          requires:
-            - "test-docker"
-      - aws-ecr/build-and-push-image:
-          name: build-and-push-image-ecr
-          account-url: AWS_ECR_ACCOUNT_URL
-          region: AWS_DEFAULT_REGION
-          repo: capstone_project
-          dockerfile: Dockerfile
-          path: ~/project/
-          tag: ${CIRCLE_SHA1}
-          filters:
-            branches:
-              only: [master]
       - aws-eks-create-cluster
