@@ -123,10 +123,9 @@ jobs:
 
     create_servers:
       docker:
-        - image: cimg/base:2020.01
+         - image: amazon/aws-cli
         steps:
           - checkout
-          - aws-cli/setup
           - run:
               name: Create EC2 instances
               command: |
