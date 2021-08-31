@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@7.2.0
+  aws-eks: circleci/aws-eks@1.1.0
   
 parameters:
   workflow-id:
@@ -73,3 +74,8 @@ workflows:
           dockerfile: Dockerfile
           path: ~/project/
           tag: ${CIRCLE_SHA1}
+      - aws-eks/create-cluster:
+          cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
+          aws-region: AWS_DEFAULT_REGION
+          requires:
+            - build-and-push-image-ecr
