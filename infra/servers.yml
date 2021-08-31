@@ -40,7 +40,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-ec2-instance1
-        - Key: Project6
+        - Key: Project
           Value: !Ref EnvironmentName
 
   ec2Instance2:
@@ -54,5 +54,5 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-ec2-instance2
-        - Key: Project6
+        - Key: Project
           Value: !Ref EnvironmentName
