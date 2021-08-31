@@ -73,5 +73,3 @@ workflows:
           dockerfile: ~/project/Dockerfile
           path: ~/project/
           tag: ${CIRCLE_SHA1}
-          requires:
-            - "push-docker-image"
