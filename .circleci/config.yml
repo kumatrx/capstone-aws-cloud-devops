@@ -14,18 +14,19 @@ parameters:
 jobs:
     run-lint:
       docker:
-        - image: circleci/node:13.8.0
+        - image: python:3.7.3-stretch
       steps:
         - checkout
         - run:
-            name: install dependencies
+            name: Make install
             command: |
-              sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
-              sudo chmod +x /bin/hadolint
+               cd docker-nginx
+               make install
         - run:
-            name: Run Lint
+            name: Lint Docker and Application files
             command: |
-              hadolint Dockerfile
+               cd docker-nginx
+               make lint
     build-docker:
       docker:
         - image: circleci/node:13.8.0
@@ -128,4 +129,4 @@ workflows:
 
   default:
     jobs:
-      - aws-eks-create-cluster
+      - run-lint
