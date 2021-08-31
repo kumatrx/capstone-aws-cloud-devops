@@ -89,6 +89,7 @@ jobs:
               sudo mv eksctl_download/eksctl /usr/local/bin/
               sudo rmdir eksctl_download
               echo $(ls /usr/local/bin/)
+              echo $(/usr/local/bin/eksctl version)
               eksctl create cluster -f config/cluster.yml
 
     deploy-application:
