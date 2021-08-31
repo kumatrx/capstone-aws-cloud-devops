@@ -37,7 +37,7 @@ jobs:
             name: Build Docker Image
             command: |
               export TAG=v${CIRCLE_BUILD_NUM}
-              export IMAGE_NAME=capstone
+              export IMAGE_NAME=capstone-aws-cloud-devops
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
     test-docker:
       docker:
@@ -48,7 +48,9 @@ jobs:
         - run:
             name: Docker Test
             command: |
-              docker run -p 8000:80 kumatrx/capstone-aws-cloud-devops
+              export TAG=v${CIRCLE_BUILD_NUM}
+              export IMAGE_NAME=capstone-aws-cloud-devops
+              docker build -t kumatrx/$IMAGE_NAME:$TAG .
               docker image ls
 
     push-docker-image:
@@ -62,7 +64,7 @@ jobs:
             name: Push Docker Image to Docker Hub
             command: |
               export TAG=v${CIRCLE_BUILD_NUM}
-              export IMAGE_NAME=capstone
+              export IMAGE_NAME=capstone-aws-cloud-devops
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD 
               docker push kumatrx/$IMAGE_NAME:$TAG
