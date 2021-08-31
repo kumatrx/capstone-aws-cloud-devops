@@ -70,6 +70,6 @@ workflows:
           account-url: AWS_ECR_ACCOUNT_URL
           region: AWS_DEFAULT_REGION
           repo: capstone_project
-          dockerfile: ~/project/Dockerfile
+          dockerfile: Dockerfile
           path: ~/project/
           tag: ${CIRCLE_SHA1}
