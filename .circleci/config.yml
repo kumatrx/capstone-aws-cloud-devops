@@ -199,4 +199,24 @@ workflows:
   default:
     jobs:
       - run-lint
-      - create_servers
+      - build-docker:
+            requires: [run-lint]
+      - push-docker:
+            requires: [build-docker]
+      - create_network:
+            requires: [build]
+            filters:
+              branches:
+                only: [master]
+      - create_cluster:
+            requires: [create_network]
+      - create_nodes:
+            requires: [create_cluster]
+      - create_servers:
+            requires: [create_nodes]
+      - create_deployment:
+            cluster-name: ProjectCapstone-ekscluster
+            requires: [create_ec2s]
+      - create_test:
+            cluster-name: ProjectCapstone-ekscluster
+            requires: [create_ec2s]
