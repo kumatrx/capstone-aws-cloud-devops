@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   aws-eks: circleci/aws-eks@0.2.3
   aws-ecr: circleci/aws-ecr@3.1.0
-  
+
 parameters:
   workflow-id:
     type: string
@@ -100,9 +100,9 @@ workflows:
             - "build-docker-image"
       - aws-ecr/build_and_push_image:
           name: build-and-push-image-ecr
-          account-url: AWS_ECR_URL
-          region: AWS_DEFAULT_REGION
-          repo: eks_orb_capstone_project
+          account-url: 918511218979.dkr.ecr.ap-northeast-1.amazonaws.com/lessonrepo
+          region: ap-northeast-1
+          repo: lessonrepo
           dockerfile: ~/project/Dockerfile
           path: ~/project/
-          tag: ${CIRCLE_SHA1}
+          tag: test
