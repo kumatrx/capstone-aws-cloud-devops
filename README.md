@@ -10,10 +10,12 @@ The following environment variablesz must be set for the project on CircleCI via
 
 | Variable                 | Description                                                                                                                                                     |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DOCKER_USERNAME`      | Used to login into Docker 
+| `DOCKER_PASSWORD`      | Used to login into Docker  
 | `AWS_ACCESS_KEY_ID`      | Used by the AWS CLI                                                                                                                                             |
 | `AWS_SECRET_ACCESS_KEY ` | Used by the AWS CLI                                                                                                                                             |
 | `AWS_DEFAULT_REGION`     | Used by the AWS CLI. Project value: "us-west-2"                                                                                                                 |
-| `AWS_ECR_URL`            | Identifies the AWS ECR docker image registry that the docker image will be pushed to, in the format `AWS_ACCOUNT_ID`.dkr.ecr.`AWS_DEFAULT_REGION`.amazonaws.com |
+| `AWS_ECR_ACCOUNT_URL`            | Identifies the AWS ECR docker image registry that the docker image will be pushed to, in the format `AWS_ACCOUNT_ID`.dkr.ecr.`AWS_DEFAULT_REGION`.amazonaws.com |
 
 ### LINKSq
 
