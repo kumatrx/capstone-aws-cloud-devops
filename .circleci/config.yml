@@ -76,7 +76,7 @@ jobs:
 
     aws-eks-create-cluster:
       docker:
-        - image: python:3.7-alpine3.11
+        - image: cimg/base:2020.01
       steps:
         - checkout
         - aws-cli/setup
