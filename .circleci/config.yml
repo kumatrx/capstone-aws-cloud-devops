@@ -28,44 +28,20 @@ jobs:
                cd docker-nginx
                make lint
     build-docker:
-      docker:
-        - image: circleci/node:13.8.0
+      machine: true
       steps:
         - checkout
-
-        - setup_remote_docker:
-            version: 19.03.13
-
         - run:
             name: Build Docker Image
             command: |
+              cd docker-nginx
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone-aws-cloud-devops
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
-    test-docker:
-      docker:
-        - image: circleci/node:13.8.0
+    push-docker:
+      machine: true
       steps:
         - checkout
-
-        - setup_remote_docker:
-            version: 19.03.13
-
-        - run:
-            name: Test Docker Image
-            command: |
-              export TAG=v${CIRCLE_BUILD_NUM}
-              export IMAGE_NAME=capstone-aws-cloud-devops
-              docker build -t kumatrx/$IMAGE_NAME:$TAG .
-              docker image ls
-
-    push-docker-image:
-      docker:
-        - image: circleci/node:13.8.0
-      steps:
-        - checkout
-        - setup_remote_docker:
-            version: 19.03.13
         - run:
             name: Push Docker Image to Docker Hub
             command: |
@@ -130,3 +106,7 @@ workflows:
   default:
     jobs:
       - run-lint
+      - build-docker:
+          requires: [run-lint]
+      - push-docker:
+          requires: [build-docker]

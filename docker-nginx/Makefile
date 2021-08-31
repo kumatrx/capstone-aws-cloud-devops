@@ -10,6 +10,6 @@ test:
 
 lint:
 	./hadolint Dockerfile
-	html_lint.py index.html
+	index.html
 
 all: install lint test
