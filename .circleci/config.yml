@@ -144,7 +144,6 @@ jobs:
               --tags project=UdacityCloudDevopsCapstoneProject \
               --stack-name EC2Instances-<< pipeline.parameters.workflow-id >> \
               --parameter-overrides file://server-params.json
-        - destroy-environment
 
     create_deployment:
       executor: aws-eks/python3
