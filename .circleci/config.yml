@@ -49,7 +49,7 @@ jobs:
             version: 19.03.13
 
         - run:
-            name: Build Docker Image
+            name: Test Docker Image
             command: |
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone-aws-cloud-devops
@@ -97,8 +97,10 @@ workflows:
           filters:
             branches:
               only: [master]
-      - aws-eks/create-cluster:
-          cluster-name: capstone-project-${CIRCLE_WORKFLOW_ID:0:7}
+      - deploy-application:
+          cluster-name: udacity1
           aws-region: AWS_DEFAULT_REGION
+          docker-image-name: AWS_ECR_ACCOUNT_URL/capstone_project:${CIRCLE_SHA1}"
+          version-info: "${CIRCLE_SHA1}"
           requires:
-            - build-and-push-image-ecr
+            - aws-eks/create-cluster
