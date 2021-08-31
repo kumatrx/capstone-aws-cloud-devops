@@ -240,5 +240,3 @@ workflows:
       - smoke_test:
             cluster-name: CapstoneProject-ekscluster
             requires: [create_nodes]
-      - cleanup:
-            requires: [smoke_test]
