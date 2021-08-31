@@ -45,6 +45,7 @@ jobs:
         - run:
             name: Push Docker Image to Docker Hub
             command: |
+              cd docker-nginx
               export TAG=v${CIRCLE_BUILD_NUM}
               export IMAGE_NAME=capstone-aws-cloud-devops
               docker build -t kumatrx/$IMAGE_NAME:$TAG .
