@@ -199,27 +199,6 @@ jobs:
             event: pass
             template: success_tagged_deploy_1
 
-    update_deployment:
-      executor: aws-eks/python3
-      parameters:
-        cluster-name:
-          description: |
-            Name of the EKS cluster
-          type: string
-      steps:
-        - checkout
-        - aws-eks/update-kubeconfig-with-authenticator:
-            cluster-name: << parameters.cluster-name >>
-            install-kubectl: true
-        - kubernetes/create-or-update-resource:
-            get-rollout-status: true
-            resource-file-path: /home/circleci/project/.circleci/deployment-and-servicev2.yml
-            resource-name: deployment/capstone-nginx
-        - run:
-          command: |
-              kubectl rollout status deployment capstone-nginx
-              kubectl get deployment capstone-nginx
-
     cleanup:
       docker:
         - image: amazon/aws-cli
@@ -259,11 +238,11 @@ workflows:
             requires: [create_network]
       - create_nodes:
           requires: [create_cluster] 
-      - create_servers:
-            requires: [create_nodes]
       - create_deployment:
-            cluster-name: ProjectCapstone-ekscluster
-            requires: [create_servers]
+            cluster-name: CapstoneProject-ekscluster
+            requires: [create_nodes]
       - smoke_test:
-            cluster-name: ProjectCapstone-ekscluster
-            requires: [create_servers]
+            cluster-name: CapstoneProject-ekscluster
+            requires: [create_nodes]
+      - cleanup:
+            requires: [smoke_test]
