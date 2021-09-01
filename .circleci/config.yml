@@ -53,6 +53,7 @@ jobs:
             name: Build Docker Image
             command: |
               cd docker-nginx
+              docker scan --file Dockerfile
               docker build -t kumatrx/udacity:capstone .
         - slack/notify:
             event: fail
