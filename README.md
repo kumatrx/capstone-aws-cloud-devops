@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/kumatrx/capstone-aws-cloud-devops/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/kumatrx/capstone-aws-cloud-devops?branch=master&status=failed&status=success)
+
 ## Cloud DevOps Engineer Capstone Project
 
 In this project you will apply the skills and knowledge which were developed throughout the Cloud DevOps Nanodegree program. These include:
